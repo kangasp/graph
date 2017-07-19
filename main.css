@@ -1,0 +1,62 @@
+body {
+	margin: 0;
+	overflow: hidden;
+}
+#stage { z-index: 1; }
+
+#tools-show {
+	z-index: 2;
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	border: 1px solid #000;
+	background-color: #fff;
+	font-family: sans-serif;
+	font-size: 90%;
+	padding: 10px;
+}
+
+#tools {
+	z-index: 2;
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	border: 1px solid #000;
+	background-color: #fff;
+	font-family: sans-serif;
+	font-size: 90%;
+	padding: 10px;
+}
+#tools p {
+	margin: 0;
+	clear: both;
+	line-height: 2em;
+}
+#tools p label {
+	font-weight: bold;
+	width: 7em;
+	float: left;
+	display: inline-block;
+}
+#tools p select {
+	float: left;
+	border: 1px solid #000;
+	color: black;
+	display: inline-block;
+}
+#tools input[type=checkbox] {
+	position: relative;
+	top: 0.5em;
+	float: left;
+	display: inline-block;
+}
+#dist {
+	display: none;
+	position: absolute;
+	top: -100px;
+	left: -100px;
+	z-index: 100;
+	background-color: #fff;
+	border: 1px solid #000;
+	padding: 0.5em;
+}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!-- saved from url=(0033)http://3dant.com/apps/graphpaper/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>Graph Paper</title>
+	<link rel="stylesheet" href="./main.css">
+	<script src="./kinetic.min.js"></script>
+	<script src="./main.js"></script>
+</head>
+<body>
+	<canvas id="stage" width="1080" height="1835"></canvas>
+	<div id="dist"></div>
+	<div id="tools-show">
+			<button onclick="tools.show()">Show Tools</button>
+	</div>
+	<div id="tools">
+		<p>
+			<label>Tools</label>
+			<button onclick="tools.hide()">Hide</button>
+		</p>
+		<hr>
+		<p>
+			<label>Actions</label>
+			<button onclick="actions.undo()">Undo</button>
+			<button onclick="actions.purge()">Start Over</button>
+			<button onclick="actions.png()">Save</button>
+		</p>
+		<p>
+			<label>Mode</label>
+			<select id="app_mode">
+				<option selected="">Draw</option>
+				<option>Delete</option>
+				<option>Move</option>
+			</select>
+		</p>
+		<p>
+			<label>Coordinates</label>
+			<span id="coord">846,1502</span>
+		</p>
+		<p>
+			<label>Line Color</label>
+			<select id="line_color">
+				<option selected="">Black</option>
+				<option>Red</option>
+				<option>Orange</option>
+				<option>Yellow</option>
+				<option>Green</option>
+				<option>Blue</option>
+				<option>Purple</option>
+			</select>
+		</p>
+		<p>
+			<label>Line Width</label>
+			<select id="line_width">
+				<option selected="">1</option>
+				<option>2</option>
+				<option>3</option>
+				<option>4</option>
+				<option>5</option>
+				<option>6</option>
+				<option>7</option>
+				<option>8</option>
+				<option>9</option>
+				<option>10</option>
+			</select>
+		</p>
+		<p>
+			<label>Scale</label>
+			<select id="scale_in">
+				<option>0</option>
+				<option selected="">1</option>
+				<option>2</option>
+				<option>3</option>
+				<option>4</option>
+				<option>5</option>
+				<option>6</option>
+				<option>7</option>
+				<option>8</option>
+				<option>9</option>
+				<option>10</option>
+				<option>11</option>
+				<option>12</option>
+			</select>
+			<span style="float: left">.</span>
+			<select id="scale_frac">
+				<option>0</option>
+				<option value=".25">�</option>
+				<option value=".5">�</option>
+				<option value=".75">�</option>
+			</select>
+			"
+		</p>
+		<p>
+			<label>Graph Rule</label>
+			<select id="spacing" onchange="spacing=this.value*72;canvas.redraw()">
+				<option value=".25">�"</option>
+				<option value=".5">�"</option>
+				<option value=".75">�"</option>
+				<option value="1">1"</option>
+			</select>
+		</p>
+	</div>
+
+
+</body></html>
