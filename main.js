@@ -6,7 +6,10 @@ var line;
 var actions;
 var dist;
 var coord;
+
+
 function initialize() {
+	/* Main Elements  */
 	dist = document.getElementById('dist');
 	stage = document.getElementById('stage');
 	tools = document.getElementById('tools');
@@ -16,19 +19,13 @@ function initialize() {
 	stage.width = window.innerWidth;
 	stage.height = window.innerHeight;
 	stage.mousedown = false;
-	coord.update = function(x,y) {
-		this.innerHTML = x+','+y;
-	};
+
 	touchdata = {
-		start:{
-			x:0,
-			y:0
-		},
-		end:{
-			x:0,
-			y:0
-		}
+		start:{ x:0, y:0 },
+		end:{ x:0, y:0 }
 	};
+
+	/* Utility Actions  */
 	actions = {
 		data: [],
 		save: function() {
@@ -66,6 +63,8 @@ function initialize() {
 			stage.redraw();
 		}
 	};
+
+	/*******  Line object  ********/
 	line = {
 		color: 'black',
 		width: 1,
@@ -122,7 +121,13 @@ function initialize() {
 			this.color = document.getElementById('line_color').value;
 			this.width = document.getElementById('line_width').value;
 		}
+	};  /*******  Line object  ********/
+
+
+	coord.update = function(x,y) {
+		this.innerHTML = x+','+y;
 	};
+
 	stage.clear = function() {
 		ctx.clearRect(0,0,this.width,this.height);
 	};
