@@ -12,8 +12,8 @@ function initialize() {
 	/* Main Elements  */
 	dist = document.getElementById('dist');
 	stage = document.getElementById('stage');
-	tools = document.getElementById('tools');
-	tools_show = document.getElementById('tools-show');
+	e_tools = document.getElementById('tools');
+	e_tools_show = document.getElementById('tools-show');
 	coord = document.getElementById('coord');
 	ctx = stage.getContext('2d');
 	stage.width = window.innerWidth;
@@ -125,8 +125,82 @@ function initialize() {
 
 
 	coord.update = function(x,y) {
-		this.innerHTML = x+','+y;
+		this.innerHTML = x + ',' + y;
 	};
+
+	/******** Stage Helpers  ********/
+
+/*
+	draw_onmousemove = function(ev) {
+		if(!ev) ev = window.event;
+		var x = ev.clientX;
+		var y = ev.clientY;
+		coord.update(x,y);
+		dist.show(x,y);
+		if(this.mousedown)
+			line.guide(x,y);
+	};
+	stage.touchmove = function(ev) {
+		var touch = ev.touches[0];
+		touchdata.end.x = touch.clientX;
+		touchdata.end.y = touch.clientY;
+		coord.update(touchdata.end.x,touchdata.end.y);
+		dist.show(touchdata.end.x,touchdata.end.y);
+		if(this.mousedown)
+			line.guide(touchdata.end.x,touchdata.end.y);
+		ev.preventDefault();
+	};
+	*/
+
+	draw_onmousedown = function(ev) {
+			if(!ev) ev = window.event;
+			var x = ev.clientX;
+			var y = ev.clientY;
+			alert( x + ', ' + y );
+		};
+
+
+/*
+	stage.touchstart = function(ev) {
+		var touch = ev.touches[0];
+		touchdata.start.x = touch.clientX;
+		touchdata.start.y = touch.clientY;
+		this.mousedown = true;
+		line.start(touchdata.start.x,touchdata.start.y);
+		dist.show(touchdata.start.x,touchdata.start.y);
+		ev.preventDefault();
+	};
+	stage.onmouseup = function(ev) {
+		if(!ev) ev = window.event;
+		this.mousedown = false;
+		var x = ev.clientX;
+		var y = ev.clientY;
+		line.stop(x,y);
+		dist.hide();
+	};
+	stage.touchend = function(ev) {
+		this.mousedown = false;
+		line.stop(touchdata.end.x,touchdata.end.y);
+		dist.hide();
+		ev.preventDefault();
+	};
+
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	stage.clear = function() {
 		ctx.clearRect(0,0,this.width,this.height);
@@ -195,7 +269,6 @@ function initialize() {
 		var y = ev.clientY;
 		line.start(x,y);
 		dist.show(x,y);
-		tools.hide();
 	};
 	stage.touchstart = function(ev) {
 		var touch = ev.touches[0];
@@ -204,7 +277,6 @@ function initialize() {
 		this.mousedown = true;
 		line.start(touchdata.start.x,touchdata.start.y);
 		dist.show(touchdata.start.x,touchdata.start.y);
-		tools.hide();
 		ev.preventDefault();
 	};
 	stage.onmouseup = function(ev) {
@@ -221,14 +293,41 @@ function initialize() {
 		dist.hide();
 		ev.preventDefault();
 	};
-	tools.show = function() {
-		this.style.display = 'block';
-		tools_show.style.display = 'none';
+
+	mode_update = function(m) {
+		if( m === 'Draw') {
+			alert('Settign Draw');
+
+			stage.onmousedown = function(ev) {
+				if(!ev) ev = window.event;
+				this.mousedown = true;
+				var x = ev.clientX;
+				var y = ev.clientY;
+				line.start(x,y);
+				dist.show(x,y);
+			};
+
+		}
+		else if( m === 'Delete') {
+			alert('Setting delete');
+			stage.onmousedown = draw_onmousedown;
+		}
+
+
 	};
-	tools.hide = function() {
-		this.style.display = 'none';
-		tools_show.style.display = 'block';
+
+	tools = {
+		show: function() {
+			e_tools.style.display = 'block';
+			e_tools_show.style.display = 'none';
+		},
+		hide: function() {
+			e_tools.style.display = 'none';
+			e_tools_show.style.display = 'block';
+		}
 	};
+
+	
 	dist.show = function (x,y) {
 		if(!stage.mousedown)
 			return false;
@@ -253,6 +352,7 @@ function initialize() {
 	dist.hide = function() {
 		this.style.display = 'none';
 	};
+
 	stage.redraw();
 };
 

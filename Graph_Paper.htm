@@ -26,7 +26,7 @@
 		</p>
 		<p>
 			<label>Mode</label>
-			<select id="app_mode">
+			<select id="app_mode" onchange="mode_update(this.value)">
 				<option selected="">Draw</option>
 				<option>Delete</option>
 				<option>Move</option>
@@ -83,18 +83,18 @@
 			<span style="float: left">.</span>
 			<select id="scale_frac">
 				<option>0</option>
-				<option value=".25">�</option>
-				<option value=".5">�</option>
-				<option value=".75">�</option>
+				<option value=".125">1/8</option>
+				<option value=".25">1/4</option>
+				<option value=".5">1/2</option>
+				<option value=".75">3/4</option>
 			</select>
-			"
 		</p>
 		<p>
 			<label>Graph Rule</label>
-			<select id="spacing" onchange="spacing=this.value*72;canvas.redraw()">
-				<option value=".25">�"</option>
-				<option value=".5">�"</option>
-				<option value=".75">�"</option>
+			<select id="spacing" onchange="spacing=this.value*72;stage.redraw()">
+				<option value=".25">1/4</option>
+				<option value=".5">1/2</option>
+				<option value=".75">3/4</option>
 				<option value="1">1"</option>
 			</select>
 		</p>

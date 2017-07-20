@@ -35,11 +35,9 @@ body {
 #tools p label {
 	font-weight: bold;
 	width: 7em;
-	float: left;
 	display: inline-block;
 }
 #tools p select {
-	float: left;
 	border: 1px solid #000;
 	color: black;
 	display: inline-block;
@@ -47,7 +45,6 @@ body {
 #tools input[type=checkbox] {
 	position: relative;
 	top: 0.5em;
-	float: left;
 	display: inline-block;
 }
 #dist {
