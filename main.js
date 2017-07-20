@@ -48,6 +48,14 @@ function initialize() {
 			stage.redraw();
 			this.restore();
 		},
+		find_index: function(x,y) {
+			/* find the index - need to find the line  */ 
+		},
+		delete: function(index) {
+			this.data.splice(this.data.length-1,1);
+			stage.redraw();
+			this.restore();
+		},
 		purge: function() {
 			for(var i=0;i<this.data.length;i++)
 				this.undo();
@@ -128,77 +136,108 @@ function initialize() {
 		this.innerHTML = x + ',' + y;
 	};
 
-	/******** Stage Helpers  ********/
-
-/*
+	/******** Stage Draw Helpers  ********/
 	draw_onmousemove = function(ev) {
 		if(!ev) ev = window.event;
 		var x = ev.clientX;
 		var y = ev.clientY;
 		coord.update(x,y);
 		dist.show(x,y);
-		if(this.mousedown)
+		if(stage.mousedown)
 			line.guide(x,y);
 	};
-	stage.touchmove = function(ev) {
+	draw_touchmove = function(ev) {
 		var touch = ev.touches[0];
 		touchdata.end.x = touch.clientX;
 		touchdata.end.y = touch.clientY;
 		coord.update(touchdata.end.x,touchdata.end.y);
 		dist.show(touchdata.end.x,touchdata.end.y);
-		if(this.mousedown)
+		if(stage.mousedown)
 			line.guide(touchdata.end.x,touchdata.end.y);
 		ev.preventDefault();
 	};
-	*/
-
 	draw_onmousedown = function(ev) {
-			if(!ev) ev = window.event;
-			var x = ev.clientX;
-			var y = ev.clientY;
-			alert( x + ', ' + y );
-		};
-
-
-/*
-	stage.touchstart = function(ev) {
+		if(!ev) ev = window.event;
+		stage.mousedown = true;
+		var x = ev.clientX;
+		var y = ev.clientY;
+		line.start(x,y);
+		dist.show(x,y);
+	};
+	draw_touchstart = function(ev) {
 		var touch = ev.touches[0];
 		touchdata.start.x = touch.clientX;
 		touchdata.start.y = touch.clientY;
-		this.mousedown = true;
+		stage.mousedown = true;
 		line.start(touchdata.start.x,touchdata.start.y);
 		dist.show(touchdata.start.x,touchdata.start.y);
 		ev.preventDefault();
 	};
-	stage.onmouseup = function(ev) {
+	draw_onmouseup = function(ev) {
 		if(!ev) ev = window.event;
-		this.mousedown = false;
+		stage.mousedown = false;
 		var x = ev.clientX;
 		var y = ev.clientY;
 		line.stop(x,y);
 		dist.hide();
 	};
-	stage.touchend = function(ev) {
-		this.mousedown = false;
+	draw_touchend = function(ev) {
+		stage.mousedown = false;
 		line.stop(touchdata.end.x,touchdata.end.y);
 		dist.hide();
 		ev.preventDefault();
 	};
 
 
-
-*/
-
-
-
-
-
-
-
-
-
-
-
+	/******** Stage Delete Helpers  ********/
+	delete_onmousemove = function(ev) {
+		if(!ev) ev = window.event;
+		var x = ev.clientX;
+		var y = ev.clientY;
+		if(stage.mousedown)
+			line.guide(x,y);
+	};
+	delete_touchmove = function(ev) {
+		var touch = ev.touches[0];
+		touchdata.end.x = touch.clientX;
+		touchdata.end.y = touch.clientY;
+		coord.update(touchdata.end.x,touchdata.end.y);
+		dist.show(touchdata.end.x,touchdata.end.y);
+		if(stage.mousedown)
+			line.guide(touchdata.end.x,touchdata.end.y);
+		ev.preventDefault();
+	};
+	delete_onmousedown = function(ev) {
+		if(!ev) ev = window.event;
+		stage.mousedown = true;
+		var x = ev.clientX;
+		var y = ev.clientY;
+		line.start(x,y);
+		dist.show(x,y);
+	};
+	delete_touchstart = function(ev) {
+		var touch = ev.touches[0];
+		touchdata.start.x = touch.clientX;
+		touchdata.start.y = touch.clientY;
+		stage.mousedown = true;
+		line.start(touchdata.start.x,touchdata.start.y);
+		dist.show(touchdata.start.x,touchdata.start.y);
+		ev.preventDefault();
+	};
+	delete_onmouseup = function(ev) {
+		if(!ev) ev = window.event;
+		stage.mousedown = false;
+		var x = ev.clientX;
+		var y = ev.clientY;
+		line.stop(x,y);
+		dist.hide();
+	};
+	delete_touchend = function(ev) {
+		stage.mousedown = false;
+		line.stop(touchdata.end.x,touchdata.end.y);
+		dist.hide();
+		ev.preventDefault();
+	};
 
 
 
@@ -243,77 +282,24 @@ function initialize() {
 		ctx.stroke();
 		actions.restore();
 	};
-	stage.onmousemove = function(ev) {
-		if(!ev) ev = window.event;
-		var x = ev.clientX;
-		var y = ev.clientY;
-		coord.update(x,y);
-		dist.show(x,y);
-		if(this.mousedown)
-			line.guide(x,y);
-	};
-	stage.touchmove = function(ev) {
-		var touch = ev.touches[0];
-		touchdata.end.x = touch.clientX;
-		touchdata.end.y = touch.clientY;
-		coord.update(touchdata.end.x,touchdata.end.y);
-		dist.show(touchdata.end.x,touchdata.end.y);
-		if(this.mousedown)
-			line.guide(touchdata.end.x,touchdata.end.y);
-		ev.preventDefault();
-	};
-	stage.onmousedown = function(ev) {
-		if(!ev) ev = window.event;
-		this.mousedown = true;
-		var x = ev.clientX;
-		var y = ev.clientY;
-		line.start(x,y);
-		dist.show(x,y);
-	};
-	stage.touchstart = function(ev) {
-		var touch = ev.touches[0];
-		touchdata.start.x = touch.clientX;
-		touchdata.start.y = touch.clientY;
-		this.mousedown = true;
-		line.start(touchdata.start.x,touchdata.start.y);
-		dist.show(touchdata.start.x,touchdata.start.y);
-		ev.preventDefault();
-	};
-	stage.onmouseup = function(ev) {
-		if(!ev) ev = window.event;
-		this.mousedown = false;
-		var x = ev.clientX;
-		var y = ev.clientY;
-		line.stop(x,y);
-		dist.hide();
-	};
-	stage.touchend = function(ev) {
-		this.mousedown = false;
-		line.stop(touchdata.end.x,touchdata.end.y);
-		dist.hide();
-		ev.preventDefault();
-	};
 
 	mode_update = function(m) {
 		if( m === 'Draw') {
-			alert('Settign Draw');
-
-			stage.onmousedown = function(ev) {
-				if(!ev) ev = window.event;
-				this.mousedown = true;
-				var x = ev.clientX;
-				var y = ev.clientY;
-				line.start(x,y);
-				dist.show(x,y);
-			};
-
+			stage.onmousemove = draw_onmousemove;
+			stage.touchmove = draw_touchmove;
+			stage.onmousedown = draw_onmousedown;
+			stage.touchstart = draw_touchstart;
+			stage.onmouseup = draw_onmouseup;
+			stage.touchend = draw_touchend;
 		}
 		else if( m === 'Delete') {
-			alert('Setting delete');
-			stage.onmousedown = draw_onmousedown;
+			stage.onmousemove = delete_onmousemove;
+			stage.touchmove 	= delete_touchmove;
+			stage.onmousedown = delete_onmousedown;
+			stage.touchstart 	= delete_touchstart;
+			stage.onmouseup 	= delete_onmouseup;
+			stage.touchend 		= delete_touchend;
 		}
-
-
 	};
 
 	tools = {
