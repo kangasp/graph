@@ -49,6 +49,51 @@ function initialize() {
 			this.restore();
 		},
 		find_index: function(x,y) {
+			var grace = 20;
+			get_y_value = function(i, x, y) {
+				if(actions.data[i].y2 === actions.data[i].y1) {
+					return(actions.data[i].y1);
+				}
+				else if(actions.data[i].x2 === actions.data[i].x1) {
+					return(y);
+				}
+				else {
+    			return (((actions.data[i].y2 - actions.data[i].y1) / 
+				  	       (actions.data[i].x2 - actions.data[i].x1)) * 
+									 	(x - actions.data[i].x1) + actions.data[i].y1);
+				}
+			};
+			get_x_value = function(i, x, y) {
+				if(actions.data[i].x2 === actions.data[i].x1) {
+					return(actions.data[i].x1);
+				}
+				else if(actions.data[i].y2 === actions.data[i].y1) {
+					return(x);
+				}
+				else {
+					return ( (y - actions.data[i].y1) / 
+				           ((actions.data[i].y2 - actions.data[i].y1) / (actions.data[i].x2 - actions.data[i].x1)) + 
+						    		 actions.data[i].x1 ); 
+				}
+			};
+			between_values = function(grace, i, x, y) {
+				return((( x >= (actions.data[i].x1-grace) && x <= (actions.data[i].x2+grace) ) || (x <= (actions.data[i].x1+grace) && x >= (actions.data[i].x2-grace) ))
+ 					  && (( y >= actions.data[i].y1 && y <= actions.data[i].y2 ) || (y <= actions.data[i].y1 && y >= actions.data[i].y2 ))); 
+			};
+
+		for( var i = 0; i < actions.data.length; i++ ) {
+			if( between_values(grace, i, x, y) ) {
+				new_x = get_x_value(i, x, y);
+				new_y = get_y_value(i, x, y);
+				if( ( (x + grace) > new_x || (x - grace) < new_x )
+				&& ( (y + grace) > new_y || (y - grace) < new_y ) ) {
+					alert(i);
+				}
+				// alert( get_x_value(i, x, y) + ', ' + get_y_value(i, x, y));
+
+			}
+		}
+
 			/* find the index - need to find the line  */ 
 		},
 		delete: function(index) {
@@ -194,49 +239,29 @@ function initialize() {
 		if(!ev) ev = window.event;
 		var x = ev.clientX;
 		var y = ev.clientY;
-		if(stage.mousedown)
-			line.guide(x,y);
 	};
 	delete_touchmove = function(ev) {
 		var touch = ev.touches[0];
 		touchdata.end.x = touch.clientX;
 		touchdata.end.y = touch.clientY;
-		coord.update(touchdata.end.x,touchdata.end.y);
-		dist.show(touchdata.end.x,touchdata.end.y);
-		if(stage.mousedown)
-			line.guide(touchdata.end.x,touchdata.end.y);
-		ev.preventDefault();
 	};
 	delete_onmousedown = function(ev) {
 		if(!ev) ev = window.event;
-		stage.mousedown = true;
 		var x = ev.clientX;
 		var y = ev.clientY;
-		line.start(x,y);
-		dist.show(x,y);
+		actions.find_index(x,y);
 	};
 	delete_touchstart = function(ev) {
 		var touch = ev.touches[0];
 		touchdata.start.x = touch.clientX;
 		touchdata.start.y = touch.clientY;
-		stage.mousedown = true;
-		line.start(touchdata.start.x,touchdata.start.y);
-		dist.show(touchdata.start.x,touchdata.start.y);
-		ev.preventDefault();
 	};
 	delete_onmouseup = function(ev) {
 		if(!ev) ev = window.event;
-		stage.mousedown = false;
 		var x = ev.clientX;
 		var y = ev.clientY;
-		line.stop(x,y);
-		dist.hide();
 	};
 	delete_touchend = function(ev) {
-		stage.mousedown = false;
-		line.stop(touchdata.end.x,touchdata.end.y);
-		dist.hide();
-		ev.preventDefault();
 	};
 
 
@@ -320,7 +345,7 @@ function initialize() {
 		this.style.left = (x+30)+'px';
 		this.style.top = (y+30)+'px';
 		this.innerHTML = x+', '+y;
-		this.innerHTML += ', '+this.distance(line.x1,line.y1,line.snap_to_grid(x),line.snap_to_grid(y))+"&quot;";
+		this.innerHTML += ', '+this.distance(line.x1,line.y1,line.snap_to_grid(x),line.snap_to_grid(y));
 		this.style.display = 'block';
 	};
 	dist.distance = function(x1,y1,x2,y2) {
@@ -338,7 +363,8 @@ function initialize() {
 	dist.hide = function() {
 		this.style.display = 'none';
 	};
-
+  
+	mode_update('Draw');
 	stage.redraw();
 };
 
