@@ -29,15 +29,17 @@ function initialize() {
 	actions = {
 		data: [],
 		save: function() {
-			this.data[this.data.length] = {
-				x1: line.x1,
-				y1: line.y1,
-				x2: line.x2,
-				y2: line.y2,
-				type: 'line',
-				color: line.color,
-				width: line.width
-			};
+			if( line.x1 !== line.x2 || line.y1 !== line.y2 ) {
+				this.data[this.data.length] = {
+					x1: line.x1,
+					y1: line.y1,
+					x2: line.x2,
+					y2: line.y2,
+					type: 'line',
+					color: line.color,
+					width: line.width
+				};
+			}
 		},
 		restore: function() {
 			for(var i=0;i<this.data.length;i++)
@@ -141,6 +143,7 @@ function initialize() {
 				ctx.strokeStyle = this.color;
 			else
 				ctx.strokeStyle = color;
+			if(this.col)
 			if(width==undefined)
 				ctx.lineWidth = this.width;
 			else
