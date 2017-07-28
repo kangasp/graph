@@ -49,7 +49,7 @@ function initialize() {
 			this.restore();
 		},
 		find_index: function(x,y) {
-			var grace = 20;
+			var grace = 10;
 			get_y_value = function(i, x, y) {
 				if(actions.data[i].y2 === actions.data[i].y1) {
 					return(actions.data[i].y1);
@@ -78,16 +78,17 @@ function initialize() {
 			};
 			between_values = function(grace, i, x, y) {
 				return((( x >= (actions.data[i].x1-grace) && x <= (actions.data[i].x2+grace) ) || (x <= (actions.data[i].x1+grace) && x >= (actions.data[i].x2-grace) ))
- 					  && (( y >= actions.data[i].y1 && y <= actions.data[i].y2 ) || (y <= actions.data[i].y1 && y >= actions.data[i].y2 ))); 
+ 					  && (( y >= actions.data[i].y1-grace && y <= actions.data[i].y2+grace ) || (y <= actions.data[i].y1+grace && y >= actions.data[i].y2-grace ))); 
 			};
 
 		for( var i = 0; i < actions.data.length; i++ ) {
 			if( between_values(grace, i, x, y) ) {
 				new_x = get_x_value(i, x, y);
 				new_y = get_y_value(i, x, y);
-				if( ( (x + grace) > new_x || (x - grace) < new_x )
-				&& ( (y + grace) > new_y || (y - grace) < new_y ) ) {
+				if( ( (x + grace) > new_x && (x - grace) < new_x )
+				&& ( (y + grace) > new_y && (y - grace) < new_y ) ) {
 					alert(i);
+					actions.data[i].highlight = true;
 				}
 				// alert( get_x_value(i, x, y) + ', ' + get_y_value(i, x, y));
 
