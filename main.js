@@ -7,6 +7,10 @@ var actions;
 var dist;
 var coord;
 
+/*
+
+*/
+
 
 function initialize() {
 	/* Main Elements  */
@@ -43,7 +47,7 @@ function initialize() {
 		},
 		restore: function() {
 			for(var i=0;i<this.data.length;i++)
-				line.draw(this.data[i].x1, this.data[i].y1, this.data[i].x2, this.data[i].y2, 'restore', this.data[i].color, this.data[i].width);
+				line.draw(this.data[i].x1, this.data[i].y1, this.data[i].x2, this.data[i].y2, 'restore', this.data[i].color, this.data[i].width, this.data[i].highlight);
 		},
 		undo: function() {
 			this.data.splice(this.data.length-1,1);
@@ -83,24 +87,21 @@ function initialize() {
  					  && (( y >= actions.data[i].y1-grace && y <= actions.data[i].y2+grace ) || (y <= actions.data[i].y1+grace && y >= actions.data[i].y2-grace ))); 
 			};
 
-		for( var i = 0; i < actions.data.length; i++ ) {
-			if( between_values(grace, i, x, y) ) {
-				new_x = get_x_value(i, x, y);
-				new_y = get_y_value(i, x, y);
-				if( ( (x + grace) > new_x && (x - grace) < new_x )
-				&& ( (y + grace) > new_y && (y - grace) < new_y ) ) {
-					alert(i);
-					actions.data[i].highlight = true;
+			for( var i = 0; i < actions.data.length; i++ ) {
+				if( between_values(grace, i, x, y) ) {
+					new_x = get_x_value(i, x, y);
+					new_y = get_y_value(i, x, y);
+					if( ( (x + grace) > new_x && (x - grace) < new_x )
+					&& ( (y + grace) > new_y && (y - grace) < new_y ) ) {
+						return(i);
+						}
 				}
-				// alert( get_x_value(i, x, y) + ', ' + get_y_value(i, x, y));
-
 			}
-		}
-
-			/* find the index - need to find the line  */ 
-		},
+		return undefined;			
+		},  /* find_index() */ 
+	
 		delete: function(index) {
-			this.data.splice(this.data.length-1,1);
+			this.data.splice(index,1);
 			stage.redraw();
 			this.restore();
 		},
@@ -139,7 +140,7 @@ function initialize() {
 				type = 'line';
 			if(type=='line')
 				this.update_options();
-			if(color==undefined)
+			else if(color==undefined)
 				ctx.strokeStyle = this.color;
 			else
 				ctx.strokeStyle = color;
@@ -228,6 +229,10 @@ function initialize() {
 		var x = ev.clientX;
 		var y = ev.clientY;
 		line.stop(x,y);
+		if(line.x1 === line.x2 && line.y1 === line.y2 ) {
+			var idx = actions.find_index(line.x1, line.x2);
+			actions.highlight(idx);
+		}
 		dist.hide();
 	};
 	draw_touchend = function(ev) {
@@ -253,7 +258,10 @@ function initialize() {
 		if(!ev) ev = window.event;
 		var x = ev.clientX;
 		var y = ev.clientY;
-		actions.find_index(x,y);
+		var idx = actions.find_index(x,y);
+		if( idx != undefined) {
+			actions.data[idx].highlight = 'yellow';
+		}
 	};
 	delete_touchstart = function(ev) {
 		var touch = ev.touches[0];
@@ -264,6 +272,10 @@ function initialize() {
 		if(!ev) ev = window.event;
 		var x = ev.clientX;
 		var y = ev.clientY;
+		var idx = actions.find_index(x,y);
+		if( idx != undefined) {
+			actions.delete(idx);
+		}
 	};
 	delete_touchend = function(ev) {
 	};
